@@ -1,87 +1,78 @@
+Router.configure({
+    layoutTemplate: 'ApplicationLayout'
+});
+
 Router.route('/', function () {
-     document.title = "bike repair";
-    this.layout('frontLayout');
+    document.title = "bike repair";
     this.render('index');
 });
 
+Router.route('/login', {
+    template: 'login',
+    onBeforeAction: function () {
+        if (Meteor.userId()) {
+            this.redirect('/articles');
+            
+        } else {
+            this.next();
+        }
+    }
+});
 
 Router.route('/articles', {
-    layoutTemplate: 'frontLayout',
-    template: 'articles'
-});
-
-
-
-Router.route('admin', function () {
-    document.title = "bike repair | admin";
-    this.layout('ApplicationLayout');
-    this.render('main');
-});
-
-Router.route('admin/articlelist', {
-    layoutTemplate: 'ApplicationLayout',
-    template: 'articlelist'
-});
-
-Router.route('admin/articlecreate', {
-    layoutTemplate: 'ApplicationLayout',
-    template: 'articlecreate'
-});
-
-Router.route('admin/articleedit/:_id', {
-    layoutTemplate: 'ApplicationLayout',
-    template: 'articleedit',
+    template: 'articles',
     data: function () {
-        var article = Article.findOne({
-            _id: this.params._id
-        });
-        Session.set('selectedArticle', article);
+        var result;
+        switch (Object.keys(this.params.query)[0]) {
+        case "tag":
+            result = Article.find({
+                tags: {
+                    $elemMatch: {
+                        _id: this.params.query.tag
+                    }
+                }
+            });
+            $('#searchfield').val('');
+            break;
+        case "category":
+            result = Article.find({
+                "category._id": this.params.query.category
+            });
+            $('#searchfield').val('');
+            break;
+        case "search":
+            var search = this.params.query.search;
+            var regex = new RegExp(search, 'i');
+            console.log(search);
+            result = Article.find({
+                "$or": [{
+                    "category.name": regex
+            }, {
+                    "name": regex
+            }, {
+                    "info": regex
+
+            }, {
+                    "tags": {
+                        $elemMatch: {
+                            name: regex
+                        }
+                    }
+                }]
+            });
+            break;
+        default:
+            result = Article.find();
+        }
         return {
-            article: article
+            articles: result
         };
-    }
-});
-
-Router.route('admin/taglist', {
-    layoutTemplate: 'ApplicationLayout',
-    template: 'taglist'
-});
-
-Router.route('admin/tagcreate', {
-    layoutTemplate: 'ApplicationLayout',
-    template: 'tagcreate'
-});
-
-Router.route('admin/tagedit/:_id', {
-    layoutTemplate: 'ApplicationLayout',
-    template: 'tagedit',
-    data: function () {
-        return {
-            tag: Tag.findOne({
-                _id: this.params._id
-            }),
-        };
-    }
-});
-
-Router.route('admin/categorylist', {
-    layoutTemplate: 'ApplicationLayout',
-    template: 'categorylist'
-});
-
-Router.route('admin/categorycreate', {
-    layoutTemplate: 'ApplicationLayout',
-    template: 'categorycreate'
-});
-
-Router.route('admin/categoryedit/:_id', {
-    layoutTemplate: 'ApplicationLayout',
-    template: 'categoryedit',
-    data: function () {
-        return {
-            category: Category.findOne({
-                _id: this.params._id
-            }),
-        };
+    },
+    onBeforeAction: function () {
+        if (!Meteor.userId()) {
+            this.render('login');
+        } else {
+            this.next();
+        }
     }
 });

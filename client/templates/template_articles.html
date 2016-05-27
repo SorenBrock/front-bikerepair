@@ -1,0 +1,50 @@
+<template name="articles">
+
+    <div class="container customContainer">
+        <h1 class="text-center">Artiker</h1>
+        <div class="row">
+            <form>
+                <div class="col-lg-6 searchForm nopadding col-md-offset-3">
+                    <div class="input-group custom-search-form">
+                        <input type="text" id="searchfield" class="form-control" placeholder="Søg...">
+                        <span class="input-group-btn">
+              <button class="btn blue-btn" type="submit" title="Søg">
+              <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                        </span>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="tags text-center" style="nopadding">
+                    {{#each alltags}}
+                    <a class="tag" href="{{pathFor 'articles' query='tag='}}{{_id}}" title="{{ name }}">{{ name }}
+                </a>{{/each}}</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 categories">
+                {{#each allcategories}}
+                <li class="category"><a href="{{pathFor 'articles' query='category='}}{{_id}}" title="Kategori: {{ name }}">{{ name }}</a></li>
+                {{/each}}
+            </div>
+            <div class="col-md-8 article">
+                {{#if articles}} {{#each articles}}
+                <h2 clas="nopadding">{{ name }}</h2>
+                <div class="col-md-12 nopadding">
+                    <h4>KATEGORI:</h4>
+                    <h4 style="font-weight: bold; text-transform: none;">{{ category.name }}</h4></div>
+                <div class="col-md-12 nopadding articleTags">
+                    <h5>Tags:</h5> {{#each tags}}
+                    <a class="inlineTags" href="{{pathFor 'articles' query='tag='}}{{_id}}">{{ name }}</a><span class="spacer"></span> {{/each}}
+                </div>
+                <p class="articleText">{{ info }}</p>
+                <hr> {{/each}} {{/if}}
+                <br />
+            </div>
+        </div>
+    </div>
+</template>

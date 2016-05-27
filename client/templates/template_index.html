@@ -1,7 +1,6 @@
 <!--    {{>navigation}} {{#unless currentUser}} {{> loginPage}} {{else}} {{> yield}} {{/unless}}-->
 
-<template name='frontLayout'>
-       <link rel="stylesheet" href="/stylesheets/style.css">
+<template name='ApplicationLayout'>
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -18,12 +17,25 @@
             <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
+                        <div class="">{{>loginButtons}}
+                        </div>
+                    </li>
+                    {{#unless currentUser}}
+                    <li>
+                        <a href="{{pathFor route='login'}}">Login</a>
+                    </li>
+
+                    {{else}}
+
+                    <li>
                         <a href="{{pathFor route='articles'}}">Artikler</a>
                     </li>
                     <li>
-                        {{#unless currentUser}}<a href="{{pathFor route='login'}}">Login</a> {{else}}
-                        <a href="/profile">profile</a> {{/unless}}
+                        <a id="login-button-logout" href="#">Logout</a>
                     </li>
+
+                    {{/unless}}
+
                 </ul>
             </div>
         </div>
