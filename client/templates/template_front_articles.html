@@ -1,0 +1,62 @@
+<template name="articles">
+
+    <div class="container customContainer">
+        <h1 class="text-center">Artiker</h1>
+        <div class="row">
+            <form id="search-form" action="/articles" method="post" role="form">
+                <div class="col-lg-6 searchForm nopadding col-md-offset-3">
+                    <div class="input-group custom-search-form">
+                        <input type="text" name="searchfield" class="form-control" placeholder="Søg...">
+                        <span class="input-group-btn">
+              <button class="btn blue-btn" type="button" title="Søg">
+              <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                        </span>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                           <div class="tags text-center" style="nopadding">
+                {{#each tag}}
+     
+
+                    <a class="tag" href="/articlesite/{{ _id}}" title="{{ name }}">
+                                {{ name }}
+                </a>
+
+                    {{/each}}       </div>
+     
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 categories">
+          {{#each category}}
+                <li class="category"><a href="/articles/{{ _id }}" title="Kategori: {{ name }}">{{ name }}</a></li>
+              {{/each}}
+
+            </div>
+            <div class="col-md-8 article">
+                <!--            {% for article in articles %}-->
+                <h2 clas="nopadding">{{ article.name }}</h2>
+                <div class="col-md-12 nopadding">
+                    <h4>KATEGORI:</h4>
+                    <h4 style="font-weight: bold; text-transform: none;">{{ article.category.name }}</h4></div>
+                <div class="col-md-12 nopadding articleTags">
+                    <h5>Tags:</h5>
+                    <!--                {% for tag in article.tags %} {% if loop.first %}{% endif %} -->
+                    <a class="inlineTags" href="/articles/{{ tag.id }}">{{ tag.name }}</a><span class="spacer"></span>
+                    <!--                {% if loop.last %} {% endif %} {% endfor %}-->
+                </div>
+                <p class="articleText">{{ article.text }}</p>
+                <hr>
+                <!--            {% endfor %}-->
+                <br />
+            </div>
+        </div>
+    </div>
+
+</template>
