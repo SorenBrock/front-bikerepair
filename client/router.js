@@ -10,12 +10,10 @@ Router.route('/', function () {
 Router.route('/login', {
     template: 'login',
     onBeforeAction: function () {
-        if (Meteor.userId()) {
+        if (Meteor.userId())
             this.redirect('/articles');
-            
-        } else {
+        else
             this.next();
-        }
     }
 });
 
@@ -51,7 +49,6 @@ Router.route('/articles', {
                     "name": regex
             }, {
                     "info": regex
-
             }, {
                     "tags": {
                         $elemMatch: {
